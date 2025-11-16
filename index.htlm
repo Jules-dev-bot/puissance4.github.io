@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puissance 4 - Jeu en ligne</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Écran d'accueil -->
+    <div id="home-screen" class="screen active">
+        <div class="container">
+            <div class="logo">
+                <div class="disc red"></div>
+                <div class="disc yellow"></div>
+                <h1>PUISSANCE 4</h1>
+                <p class="tagline">Le jeu classique réinventé</p>
+            </div>
+
+            <div class="card">
+                <h2>Rejoindre une partie</h2>
+                <form id="player-form">
+                    <div class="form-group">
+                        <label for="player-name">Votre nom</label>
+                        <input 
+                            type="text" 
+                            id="player-name" 
+                            placeholder="Entrez votre pseudo"
+                            maxlength="20"
+                            required
+                        >
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <span class="icon">🎮</span>
+                        Chercher un adversaire
+                    </button>
+                </form>
+
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="online-players">0</span>
+                        <span class="stat-label">Joueurs en ligne</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="active-games">0</span>
+                        <span class="stat-label">Parties en cours</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rules-link">
+                <a href="#" id="show-rules">📖 Comment jouer ?</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Écran de chargement -->
+    <div id="loading-screen" class="screen">
+        <div class="container">
+            <div class="loading-content">
+                <div class="player-card me">
+                    <div class="player-avatar">
+                        <div class="disc red"></div>
+                    </div>
+                    <h3 id="player1-name">Joueur 1</h3>
+                    <p class="player-status">✓ Prêt</p>
+                </div>
+
+                <div class="vs-section">
+                    <div class="loading-animation">
+                        <div class="disc red fall"></div>
+                        <div class="disc yellow fall" style="animation-delay: 0.3s;"></div>
+                        <div class="disc red fall" style="animation-delay: 0.6s;"></div>
+                    </div>
+                    <h2 class="vs-text">VS</h2>
+                    <p class="waiting-text">Recherche d'un adversaire...</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div class="player-card opponent">
+                    <div class="player-avatar waiting">
+                        <div class="disc yellow"></div>
+                        <span class="question">?</span>
+                    </div>
+                    <h3 id="player2-name">En attente...</h3>
+                    <p class="player-status">⏳ Recherche...</p>
+                </div>
+            </div>
+
+            <button id="cancel-search" class="btn btn-secondary">
+                ✕ Annuler la recherche
+            </button>
+        </div>
+    </div>
+
+    <!-- Écran de jeu -->
+    <div id="game-screen" class="screen">
+        <div class="game-container">
+            <!-- Header du jeu -->
+            <div class="game-header">
+                <div class="player-info">
+                    <div class="player-indicator red active">
+                        <div class="disc red"></div>
+                        <span id="game-player1-name">Joueur 1</span>
+                    </div>
+                </div>
+
+                <div class="turn-indicator">
+                    <div id="current-turn-disc" class="disc red"></div>
+                    <p id="turn-text">Tour de Joueur 1</p>
+                    <div class="timer" id="timer">30</div>
+                </div>
+
+                <div class="player-info">
+                    <div class="player-indicator yellow">
+                        <div class="disc yellow"></div>
+                        <span id="game-player2-name">Joueur 2</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Plateau de jeu -->
+            <div class="game-board" id="game-board">
+                <!-- Colonnes (7 colonnes x 6 lignes) -->
+            </div>
+
+            <!-- Actions -->
+            <div class="game-actions">
+                <button id="restart-game" class="btn btn-secondary">
+                    🔄 Nouvelle partie
+                </button>
+                <button id="quit-game" class="btn btn-danger">
+                    🚪 Quitter
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal des règles -->
+    <div id="rules-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>📖 Règles du Puissance 4</h2>
+            
+            <div class="rules-content">
+                <div class="rule-item">
+                    <h3>🎯 Objectif</h3>
+                    <p>Alignez 4 jetons de votre couleur horizontalement, verticalement ou en diagonale avant votre adversaire.</p>
+                </div>
+
+                <div class="rule-item">
+                    <h3>🎮 Comment jouer</h3>
+                    <p>À tour de rôle, les joueurs choisissent une colonne et y laissent tomber un jeton. Le jeton tombe jusqu'à la position la plus basse disponible.</p>
+                </div>
+
+                <div class="rule-item">
+                    <h3>⏱️ Temps</h3>
+                    <p>Chaque joueur dispose de 30 secondes pour jouer son coup. Passé ce délai, un coup aléatoire sera joué automatiquement.</p>
+                </div>
+
+                <div class="rule-item">
+                    <h3>🏆 Victoire</h3>
+                    <p>Le premier joueur à aligner 4 jetons remporte la partie. Si la grille est remplie sans alignement, la partie est nulle.</p>
+                </div>
+
+                <div class="rule-item">
+                    <h3>🔴🟡 Couleurs</h3>
+                    <p>Le premier joueur joue avec les jetons rouges, le second avec les jaunes.</p>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" onclick="document.getElementById('rules-modal').style.display='none'">
+                Compris !
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal de fin de partie -->
+    <div id="end-modal" class="modal">
+        <div class="modal-content celebration">
+            <div class="confetti"></div>
+            <div id="end-message"></div>
+            <div class="end-actions">
+                <button id="play-again" class="btn btn-primary">
+                    🔄 Rejouer
+                </button>
+                <button id="back-home" class="btn btn-secondary">
+                    🏠 Retour à l'accueil
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
